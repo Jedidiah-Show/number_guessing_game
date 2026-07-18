@@ -14,10 +14,10 @@ def load_leaderboard():
         data = json.load(file)
 
     leaderboard_list = []
-    for username, profile in data.items():
+    for user_name, profile in data.items():
         score = profile.get("high_score", 0)
         if score > 0:
-            leaderboard_list.append((username, score))
+            leaderboard_list.append((user_name, score))
 
     sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
     top_five = sorted_leaderboard[:5]

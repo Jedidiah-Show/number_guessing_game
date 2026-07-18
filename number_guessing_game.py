@@ -15,22 +15,22 @@ def home():
             options = ("1. Sign up", "2. Log in", "3. Exit")
             text("\n".join(map(str, options)))
             choice = select_index(len(options))
-            username = ""
+            user_name = ""
             match choice:
                 case choice if choice == 0:
                     text("Sign up selected.")
-                    username = signup()
+                    user_name = signup()
                 case choice if choice == 1:
                     text("Log in selected.")
-                    username = login()
+                    user_name = login()
                 case _ :
                     is_exit()
         except KeyboardInterrupt:
             is_exit("interrupt")
         else:
             clearscreen()
-            text(f"Welcome, {username}!")
-            main_menu(username)
+            text(f"Welcome, {user_name}!")
+            main_menu(user_name)
             continue
         
 home()

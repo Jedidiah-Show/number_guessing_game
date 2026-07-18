@@ -4,7 +4,7 @@ import json
 import os
 import bcrypt
 
-database = "users.json"
+database = "data/users.json"
 
 def load_database():
     if not os.path.exists(database):
@@ -16,13 +16,15 @@ def load_database():
         return {}
 
 def save_database(data):
-    with open(database, "w") as file:
+    tmp = database + ".tmp"
+    with open(tmp, "w") as file:
         json.dump(data, file, indent=4)
+    os.replace(tmp, database)
 
-def register_user(username, fullname, password):
+def register_user(user_name, fullname, password):
     db = load_database()
 
-    if username in db:
+    if user_name in db:
         err = "Error: Username already taken!"
         return False, err
 
@@ -32,7 +34,7 @@ def register_user(username, fullname, password):
 
     hashed_string = hashed_bytes.decode('utf-8')
 
-    db[username] = {
+    db[user_name] = {
         "fullname": fullname,
         "password_hash": hashed_string,
     }
@@ -40,18 +42,18 @@ def register_user(username, fullname, password):
     save_database(db)
     return True, ""
 
-def verify_username(username): 
+def verify_username(user_name): 
     db = load_database()
 
-    if username not in db:
+    if user_name not in db:
         err = "Error: Unknown user or wrong username"
         return False, err
     return True, ""
 
-def verify_password(username, password):
+def verify_password(user_name, password):
     db = load_database()
 
-    stored_hash_bytes = db[username]["password_hash"].encode('utf-8')
+    stored_hash_bytes = db[user_name]["password_hash"].encode('utf-8')
     
     input_password_bytes = password.encode('utf-8')
 
@@ -61,10 +63,10 @@ def verify_password(username, password):
         err = "Error: Invalid password."
         return False, err
 
-def forgot_password(username, fullname):
+def forgot_password(user_name, fullname):
         db = load_database()
         
-        data  = db.get(username)
+        data  = db.get(user_name)
         if not fullname == data["fullname"]:
             err = "Account not found in database"
             return False, err

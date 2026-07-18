@@ -13,10 +13,16 @@ def username():
     fullname = fname.title() + " " + lname.title()
     text(fullname)
     user_name = ""
-    selection = entry("Would you like me to generate a username for you? y/n ").strip()
-    if selection.lower == "y" or selection.lower() == "yes":
+    selection = choice("Would you like me to generate a username for you? y/n ").strip()
+    if selection.lower() == "y" or selection.lower() == "yes":
         user_name = fname[0].lower() + lname.lower()
-        return user_name, fullname
+        text(user_name)
+        selection = choice("Wish to create a custom username instead? y/n ").strip()
+        if selection.lower()== "y" or selection.lower() == "yes":
+            user_name = validinput("username")
+            return user_name, fullname
+        else:
+            return user_name, fullname
     user_name = validinput("username")
     return user_name, fullname
 
@@ -67,6 +73,7 @@ def login():
                 selection = choice("Seems you don't have an account yet! Wanna sign up? y/n ").strip()
                 if selection.lower() == "y" or selection.lower() == "yes":
                     signup()
+                    return user_name
                 continue
             count = 1
             break

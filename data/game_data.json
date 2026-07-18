@@ -11,10 +11,50 @@
     },
     "jshow": {
         "current_session": {
-            "secret_number": 23,
+            "secret_number": 88,
+            "level": 14,
+            "score": 49,
+            "attempts": 1
+        },
+        "high_score": 0,
+        "max_level": 1
+    },
+    "aishow": {
+        "current_session": {
+            "secret_number": 13,
             "level": 1,
-            "score": 5,
-            "attempts": 0
+            "score": 0,
+            "attempts": 2
+        },
+        "high_score": 0,
+        "max_level": 1
+    },
+    "Psalmmy": {
+        "current_session": {
+            "secret_number": 13,
+            "level": 1,
+            "score": 0,
+            "attempts": 2
+        },
+        "high_score": 0,
+        "max_level": 1
+    },
+    "musdam": {
+        "current_session": {
+            "secret_number": 9,
+            "level": 1,
+            "score": 0,
+            "attempts": 2
+        },
+        "high_score": 0,
+        "max_level": 1
+    },
+    "jryan": {
+        "current_session": {
+            "secret_number": 17,
+            "level": 1,
+            "score": 0,
+            "attempts": 1
         },
         "high_score": 0,
         "max_level": 1
