@@ -21,7 +21,7 @@ A terminal-based number guessing game with user accounts, persistent sessions, l
 ## Installation
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Jedidiah-Show/number_guessing_game.git
 cd number_guessing_game
 pip install requirements.txt
 ```
