@@ -1,0 +1,22 @@
+{
+    "ashogbesan": {
+        "current_session": {
+            "secret_number": 16,
+            "level": 1,
+            "score": 0,
+            "attempts": 1
+        },
+        "high_score": 37,
+        "max_level": 5
+    },
+    "jshow": {
+        "current_session": {
+            "secret_number": 23,
+            "level": 1,
+            "score": 5,
+            "attempts": 0
+        },
+        "high_score": 0,
+        "max_level": 1
+    }
+}
