@@ -4,7 +4,7 @@ import json
 import os
 import bcrypt
 
-database = "data/users.json"
+database = "data/database.json"
 
 def load_database():
     if not os.path.exists(database):
