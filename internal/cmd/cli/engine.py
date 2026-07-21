@@ -47,17 +47,21 @@ def saved_game_config(saved_game, user_name):
 def launcher(user_name, prompt="new game"):
     saved_game = load_ongoing_game(user_name)
     if prompt == "saved game": 
-        if saved_game == None:
+        if saved_game is None:
             error(f"No ongoing game found for {user_name}. Starting a new game...")
             sleep_time(1)
             prompt = "new game"
     else:
-        if not saved_game == None:
+        if saved_game is not None:
             prompt = "saved game"
 
     score_list, level_list = load_leaderboard()
-    highest_score = score_list[0]
-    highest_level = level_list[0]
+    if score_list and level_list:
+        highest_score = score_list[0]
+        highest_level = level_list[0]
+    else:
+        highest_score = {}
+        highest_level = {}
 
     try:
         match prompt:
@@ -73,10 +77,10 @@ def launcher(user_name, prompt="new game"):
 def guesser(user_name, secret_number, attempts, score, level, highest_score, highest_level):
     while True:
         try:
-            if highest_level is None:
-                highest_level = {"N\A", 0}
-            if highest_score is None:
-                highest_score = {"N\A", 0}
+            if not highest_level:
+                highest_level = ("N\A", 1)
+            if not highest_score:
+                highest_score = ("N\A", 0)
     
             top_level, top_score = update_best_record(user_name, highest_level[1], highest_score[1], level, score)
             best_record_msg= []
@@ -84,7 +88,7 @@ def guesser(user_name, secret_number, attempts, score, level, highest_score, hig
             if highest_level[1] < top_level:
                 top_lvl_player = user_name
                 best_record_msg.append("Record Breaker! You are now the maximum level title holder!")
-            top_score_player = highest_level[0]
+            top_score_player = highest_score[0]
             if highest_score[1] < top_score:
                 top_score_player = user_name
                 best_record_msg.append("Showstealer! You are now the highest score champ!")
@@ -100,7 +104,7 @@ def guesser(user_name, secret_number, attempts, score, level, highest_score, hig
             text(score_line)
 
             if attempts >= 10:
-                gameover(user_name, secret_number, level, attempts, score, best_record_msg)
+                gameover(user_name, secret_number, level, score, best_record_msg)
                 level = 1
                 secret_number, level, attempts, score, = new_game_config(level)
                 text("New session")

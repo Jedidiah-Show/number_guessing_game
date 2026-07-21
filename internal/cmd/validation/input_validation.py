@@ -3,7 +3,6 @@
 from internal.ui.ui import error, choice, entry
 from internal.cmd.helpers.helpers import is_exit, sleep_time
 
-
 def validinput(prompt_name= ""):
     err = f"Invalid {prompt_name} name. Please use letters only and do not leave any empty field"
     while True:
