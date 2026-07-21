@@ -8,7 +8,8 @@ database = "database.json"
 
 def load_database():
     if not os.path.exists(database):
-        return {}
+        with open(database, "w") as file:
+            json.dump({}, file, indent=4)
     try:
         with open(database, "r") as file:
             return json.load(file)
