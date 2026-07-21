@@ -19,11 +19,19 @@ def load_leaderboard():
     level_list = []
 
     for user_name, profile in data.items():
-        score = profile.get("high_score", 0)
-        level = profile.get("max_level", 1) # Default to level 1 for safety
         
-        score_list.append((user_name, score))
-        level_list.append((user_name, level))
+        high_score = profile.get("high_score", 0)
+        max_level = profile.get("max_level", 1) 
+        session = profile.get("current_session") or {}
+        current_score = session.get("score", 0)
+        current_level = session.get("level", 1)
+
+        best_user_score = max(high_score, current_score)
+        best_user_level = max(max_level, current_level)
+
+        score_list.append((user_name, best_user_score))
+        level_list.append((user_name, best_user_level))
+
 
     # Sort both boards independently
     sorted_score = sorted(score_list, key=lambda x: x[1], reverse=True)
@@ -52,11 +60,13 @@ def view_leaderboard():
         return
 
     clearscreen()
+    header("Global Top 5 Leaderboard")
 
-    msg = "Top 5 Highest Scores"
-    text
-    text(f"   Rank | {'Player':<15} | {'Score':>10}")
-    text("-" * len)
+    msg = "  Top 5 Highest Scores"
+    text(msg)
+    submsg = f"  Rank | {'Player':<15} | {'Score':>10}"
+    text(submsg)
+    text("-" * len(submsg))
     
     for rank, (user, score) in enumerate(top_five_score, start=1):
         color, medal = get_medal_and_color(rank)
@@ -66,12 +76,14 @@ def view_leaderboard():
         else:
             text(score_line)
             
-    text("\n" + "="*38 + "\n")
+    text("\n" + "="* len(score_line) + "\n")
 
    
-    text("Top 5 Peak Levels")
-    text(f"   Rank | {'Player':<15} | {'Max Level':>10}")
-    text("-" * 38)
+    msg = "  Top 5 Peak Levels"
+    text(msg)
+    submsg = f"  Rank | {'Player':<15} | {'Max Level':>10}"
+    text(submsg)
+    text("-" * len(submsg))
     
     for rank, (user, level) in enumerate(top_five_level, start=1):
         color, medal = get_medal_and_color(rank)
@@ -81,7 +93,7 @@ def view_leaderboard():
         else:
             text(level_line)
             
-    text("\n" + "="*38 + "\n")
+    text("\n" + "="*len(level_line) + "\n")
 
     go_back("Main Menu")
     return

@@ -12,7 +12,7 @@ def main_menu(user_name):
         clearscreen()
         header("Main Menu")
         try:
-            options= ("1. Resume saved game", "2. Start a new game", "3. Check highscore", "4. How to play", "5. log out", "6. Exit")
+            options= ("1. Resume saved game", "2. Start a new game", "3. Leaderboard", "4. How to play", "5. log out", "6. Exit")
             text("\n".join(map(str,options)))
             choice = select_index(len(options)) 
             match choice:

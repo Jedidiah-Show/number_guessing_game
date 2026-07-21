@@ -68,53 +68,33 @@ def handle_game_over(user_name, final_level, final_score):
 
     if "max_level" not in data[user_name]:  # Guard code for older profiles missing this key
         data[user_name]["max_level"] = 1   
-    
 
     message = []
     if final_score > data[user_name]["high_score"]:
         data[user_name]["high_score"] = final_score
-        message.append(f"New Personal Best for {user_name}: {final_score}!")
-
-    highest_score = get_highest_score()
-    if final_score > highest_score:
-        message.append(f"Highest Score record holder: {final_score}!") 
-    
-    highest_level = get_highest_level()
-    if final_level > highest_level:
-        message.append(f"You are now the current Highest level Champ : level {final_level}")
-    elif final_level > data[user_name]["max_level"]:
+        message.append(f"New Personal High score: {final_score} pts")
+        
+    if final_level > data[user_name]["max_level"]:
         data[user_name]["max_level"] = final_level
-        message.append(f"Highest level Reached: level {final_level}")
+        message.append(f"Highest level reached so far: level {final_level}")
 
     with open(filename, "w") as file:
         json.dump(data, file, indent=4)
     
     return f"Well done {user_name}!\n" + "\n".join(message) if message else "" 
 
-
-def get_highest_score():
-
-    if not os.path.exists(filename):
-        return None
-        
+def update_best_record(user_name, highest_level, highest_score, level, score):
     with open(filename, "r") as file:
         data = json.load(file)
-    if not data:
-        return None
-
-    top_user = max(data, key=lambda user: data[user]["high_score"])
+    data = ensure_user_profile(data, user_name)
     
-    return {"user_name": top_user, "score": data[top_user]["high_score"]}
-
-def get_highest_level():
-    if not os.path.exists(filename):
-        return None
-        
-    with open(filename, "r") as file:
-        data = json.load(file)
-    if not data:
-        return None
-
-    top_user = max(data, key=lambda user: data[user]["max_level"])
+    top_level= max(highest_level, level)
+    top_score= max(highest_score, score)
+    if top_score > highest_score:
+        data[user_name]["high_score"] = top_score
+    if top_level > highest_level:
+        data[user_name]["max_level"] = top_level
     
-    return {"user_name": top_user, "level": data[top_user]["max_level"]}
+    save_json(data, filename)
+    
+    return top_level, top_score
