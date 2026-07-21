@@ -3,7 +3,7 @@
 import json
 import os
 
-filename = "data/game_data.json"
+filename = "game_data.json"
 
 def init_storage():
     if not os.path.exists(filename):

@@ -22,4 +22,4 @@ Thumbs.db
 *.swp
 
 # Game data (as above)
-data/*.json
+*.json
