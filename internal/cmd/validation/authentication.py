@@ -20,10 +20,12 @@ def username():
         selection = choice("Wish to create a custom username instead? y/n ").strip()
         if selection.lower()== "y" or selection.lower() == "yes":
             user_name = validinput("username")
+            text(user_name)
             return user_name, fullname
         else:
             return user_name, fullname
     user_name = validinput("username")
+    text(user_name)
     return user_name, fullname
 
 def password():

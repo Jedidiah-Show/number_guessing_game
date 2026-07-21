@@ -66,15 +66,23 @@ def handle_game_over(user_name, final_level, final_score):
 
     data[user_name]["current_session"] = None
 
+    if "max_level" not in data[user_name]:  # Guard code for older profiles missing this key
+        data[user_name]["max_level"] = 1   
+    
+
     message = []
     if final_score > data[user_name]["high_score"]:
         data[user_name]["high_score"] = final_score
-        message.append(f"New Personal Best for {user_name}: {final_score}!") 
-    
-    if "max_level" not in data[user_name]:  # Guard code for older profiles missing this key
-        data[user_name]["max_level"] = 1   
+        message.append(f"New Personal Best for {user_name}: {final_score}!")
 
-    if final_level > data[user_name]["max_level"]:
+    highest_score = get_highest_score()
+    if final_score > highest_score:
+        message.append(f"Highest Score record holder: {final_score}!") 
+    
+    highest_level = get_highest_level()
+    if final_level > highest_level:
+        message.append(f"You are now the current Highest level Champ : level {final_level}")
+    elif final_level > data[user_name]["max_level"]:
         data[user_name]["max_level"] = final_level
         message.append(f"Highest level Reached: level {final_level}")
 

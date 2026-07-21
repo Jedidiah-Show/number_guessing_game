@@ -50,11 +50,11 @@ def valid_guess(guess, max_num= 25):
             return user_guess
         else:
             error(f"Error: number above range. Please input between 1 and {max_num}")
-            sleep_time(1)
+            sleep_time(2)
             return -1
     except ValueError:
         error("Invalid number")
-        sleep_time(1)
+        sleep_time(2)
         return -1
 
    

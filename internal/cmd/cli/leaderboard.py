@@ -6,55 +6,82 @@ from internal.cmd.helpers.helpers import go_back, sleep_time, clearscreen
 
 def load_leaderboard():
     if not os.path.exists(filename):
-        error("No high scores recorded yet!")
-        sleep_time(2)
-        return
+        return [], []
 
     with open(filename, "r") as file:
-        data = json.load(file)
+        try:
+            data = json.load(file)
+        except json.JSONDecodeError:
+            return [], []
 
-    leaderboard_list = []
+    # Build individual lists so players can rank on one board even if they are 0 on the other
+    score_list = []
+    level_list = []
+
     for user_name, profile in data.items():
         score = profile.get("high_score", 0)
-        if score > 0:
-            leaderboard_list.append((user_name, score))
+        level = profile.get("max_level", 1) # Default to level 1 for safety
+        
+        score_list.append((user_name, score))
+        level_list.append((user_name, level))
 
-    sorted_leaderboard = sorted(leaderboard_list, key=lambda x: x[1], reverse=True)
-    top_five = sorted_leaderboard[:5]
-    return top_five
+    # Sort both boards independently
+    sorted_score = sorted(score_list, key=lambda x: x[1], reverse=True)
+    sorted_level = sorted(level_list, key=lambda x: x[1], reverse=True)
+
+    return sorted_score[:5], sorted_level[:5]
    
+def get_medal_and_color(rank):
+    if rank == 1:
+        return GOLD, "👑"
+    elif rank == 2:
+        return SILVER, "🥈"
+    elif rank == 3:
+        return BRONZE, "🥉"
+    return "", "  "
+
 def view_leaderboard():
-    top_five = load_leaderboard()
-    clearscreen()
-    header("Global Top 5 Leaderboard")
-    msg_len = 0
-    for rank, (user, score) in enumerate(top_five, start=1):
-        if rank == 1:
-            color = GOLD
-            medal = "👑"
-        elif rank == 2:
-            color = SILVER
-            medal = "🥈"
-        elif rank == 3:
-            color = BRONZE
-            medal = "🥉"
-        else:
-            color = "" 
-            medal = "  "
+    top_five_score, top_five_level = load_leaderboard()
     
-        rank_str = f"#{rank}"
-        score_line = f"{medal} {rank_str:<2} | {user:<15} | Score: {score:>5}"
-        msg_len= len(score_line)
+    if not top_five_score and not top_five_level:
+        clearscreen()
+        header("Leaderboards")
+        error("No high scores recorded yet!")
+        sleep_time(2)
+        go_back("Main Menu")
+        return
+
+    clearscreen()
+
+    msg = "Top 5 Highest Scores"
+    text
+    text(f"   Rank | {'Player':<15} | {'Score':>10}")
+    text("-" * len)
+    
+    for rank, (user, score) in enumerate(top_five_score, start=1):
+        color, medal = get_medal_and_color(rank)
+        score_line = f"{medal} #{rank:<2} | {user:<15} | {score:>6} pts"
         if color:
             text(f"{color}{score_line}{RESET}")
         else:
             text(score_line)
+            
+    text("\n" + "="*38 + "\n")
+
+   
+    text("Top 5 Peak Levels")
+    text(f"   Rank | {'Player':<15} | {'Max Level':>10}")
+    text("-" * 38)
     
-    text("\n")
-    if msg_len > 0:
-        text("=" * (msg_len))
-        text("\n")
+    for rank, (user, level) in enumerate(top_five_level, start=1):
+        color, medal = get_medal_and_color(rank)
+        level_line = f"{medal} #{rank:<2} | {user:<15} | Lvl {level:>5}"
+        if color:
+            text(f"{color}{level_line}{RESET}")
+        else:
+            text(level_line)
+            
+    text("\n" + "="*38 + "\n")
 
     go_back("Main Menu")
     return
-    

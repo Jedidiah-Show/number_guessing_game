@@ -36,11 +36,15 @@ def saved_game_config(saved_game):
             is_exit("interrupt")
 
 def launcher(user_name, prompt="new game"):
-    if prompt == "saved game":
-        saved_game = load_ongoing_game(user_name)
+    saved_game = load_ongoing_game(user_name)
+    if prompt == "saved game": 
         if saved_game == None:
             error(f"No ongoing game found for {user_name}. Starting a new game...")
+            sleep_time(1)
             prompt = "new game"
+    else:
+        if not saved_game == None:
+            prompt = "saved game"
     highest_score = get_highest_score()
     highest_level = get_highest_level()
     try:
@@ -79,7 +83,7 @@ def guesser(user_name, secret_number, attempts, score, level, highest_score, hig
                 text(f"Level {level}")
             else:
                 max_num = 25 * level
-                guess = entry(f"guess (1-{max_num})")
+                guess = entry(f"guess (1-{max_num})").strip()
                 if guess.lower() == "exit":
                     save_ongoing_game(user_name, secret_number, level, attempts, score)
                     correct(f"Game autosaved for {user_name}!")
@@ -120,13 +124,14 @@ def guesser(user_name, secret_number, attempts, score, level, highest_score, hig
                             correct("You have earned 2 points")
                   
                     attempts = 0
-                    save_ongoing_game(user_name, secret_number, level, attempts, score)
-                    text("Next Level - Level {level}")
-                    sleep_time(2)
                     level+=1
+                    save_ongoing_game(user_name, secret_number, level, attempts, score)
+                    text(f"Next Level - Level {level}")
+                    sleep_time(2)
+                    
                     secret_number, _, attempts, _ = new_game_config(level)
                     correct(f"Game autosaved for {user_name}!") 
-                    s    
+                    sleep_time(1)
                     continue 
         except KeyboardInterrupt:
             is_exit("interrupt")
