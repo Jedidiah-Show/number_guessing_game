@@ -10,7 +10,7 @@ from internal.cmd.cli.leaderboard import load_leaderboard
 def gameover(user_name, secret_number, level, score, best_record_msg):
     error(f"Oops!!! You have used up your 10 attempts\nThe secret number is {secret_number}.\nGAME OVER!")
     if best_record_msg:
-        correct("\n".join(str, best_record_msg))
+        correct("\n".join(map(str, best_record_msg)))
     message = handle_game_over(user_name, level, score)
     if message:
         correct(message)
