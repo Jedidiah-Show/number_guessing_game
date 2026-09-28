@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#edf2e9">
+  <title>Number Guessing Game</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Number Game home"><span class="brand-mark">25</span><span>NUMBER<br>GAME</span></a>
+    <div class="topbar-right"><span class="local-status"><i></i> LOCAL GAME</span><button id="instructions-open" class="icon-button" type="button" aria-label="How to play" title="How to play">?</button><button id="logout" class="quiet-button" type="button" hidden>Sign out</button></div>
+  </header>
+
+  <main>
+    <div id="notice" class="notice" role="alert" hidden></div>
+
+    <section id="auth-view" class="auth-layout" hidden>
+      <div class="intro-panel">
+        <div class="eyebrow"><span class="marker"></span> A GAME OF INSTINCT AND PATIENCE</div>
+        <h1>Find the number.<br><em>Find your rhythm.</em></h1>
+        <p>One hidden number. Ten chances. Each level opens a wider range.</p>
+        <div class="number-art" aria-label="The number 17 highlighted in a range from 1 to 25">
+          <span class="art-kicker">LEVEL 01 <b>RANGE 1—25</b></span>
+          <div class="art-number">17</div>
+          <div class="number-scale"><i></i><i></i><i></i><i></i><i></i><i class="scale-active"></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="art-caption"><span>LOW</span><span>THE ANSWER IS HIDING HERE</span><span>HIGH</span></div>
+        </div>
+        <div class="intro-foot"><span>01 / 10</span><span>TAKE A GUESS</span></div>
+      </div>
+      <section class="auth-panel" aria-labelledby="auth-title">
+        <div class="auth-heading"><span class="eyebrow">YOUR NEXT RUN</span><h2 id="auth-title">Welcome back.</h2><p id="auth-subtitle">Sign in to continue your game.</p></div>
+        <div class="mode-tabs" role="tablist" aria-label="Account actions"><button id="login-tab" type="button" role="tab" aria-selected="true">Sign in</button><button id="register-tab" type="button" role="tab" aria-selected="false">Create account</button></div>
+        <form id="auth-form">
+          <div id="name-fields" class="name-fields" hidden><label>First name<input name="first_name" autocomplete="given-name" minlength="1"></label><label>Last name<input name="last_name" autocomplete="family-name" minlength="1"></label></div>
+          <label>Username<input name="username" autocomplete="username" required></label>
+          <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+          <p id="password-help" class="field-help" hidden>Use at least six letters or numbers.</p>
+          <button class="button button-dark auth-submit" type="submit"><span id="auth-submit-label">Sign in</span><span aria-hidden="true">↗</span></button>
+        </form>
+        <p class="privacy-note"><span aria-hidden="true">◉</span> Your account and progress stay on this computer.</p>
+      </section>
+    </section>
+
+    <section id="lobby-view" class="lobby-layout" hidden>
+      <div class="lobby-heading"><div><div class="eyebrow"><span class="marker"></span> PLAYER BASE</div><h1>Good to see you, <em id="lobby-user"></em>.</h1><p>Your best run is <b id="lobby-best">0 pts</b> across a peak of <b id="lobby-level">level 1</b>.</p></div><span class="level-stamp">25<span>× LEVEL</span></span></div>
+      <div class="lobby-columns">
+        <section class="panel launch-panel"><div class="eyebrow">PICK UP WHERE YOU LEFT OFF</div><h2>Ready when you are.</h2><p id="saved-copy">Start a run and see how far your instincts take you.</p><div class="launch-actions"><button id="resume-button" class="button button-lime" type="button" hidden>Resume saved game <span>↗</span></button><button id="new-button" class="button button-dark" type="button">Start a new game <span>↗</span></button></div><div class="launch-rule"><span>01</span><span>Guess between 1 and 25 × your current level.</span></div><div class="launch-rule"><span>02</span><span>Ten attempts. A quick solve earns the most points.</span></div><div class="launch-rule"><span>03</span><span>Level up to widen the range and keep your score.</span></div></section>
+        <section class="panel leaderboard-panel"><div class="panel-heading"><div><div class="eyebrow">THE LOCAL LEADERS</div><h2>Best so far.</h2></div><button id="refresh-board" class="icon-button refresh-button" type="button" title="Refresh leaderboards" aria-label="Refresh leaderboards">↻</button></div><div class="board-section"><div class="board-label"><span>TOP SCORES</span><span>POINTS</span></div><ol id="score-board" class="leader-list"></ol></div><div class="board-section"><div class="board-label"><span>PEAK LEVELS</span><span>LEVEL</span></div><ol id="level-board" class="leader-list"></ol></div><p class="board-foot">All progress is saved in your local game files.</p></section>
+      </div>
+    </section>
+
+    <section id="play-view" class="play-layout" hidden>
+      <div class="play-heading"><div><div class="eyebrow"><span class="marker"></span> LEVEL <span id="level-label">01</span></div><h1>Read the clues.<br><em>Trust your guess.</em></h1></div><button id="back-to-lobby" class="quiet-button" type="button">← Game menu</button></div>
+      <div class="play-columns">
+        <section id="guess-panel" class="panel guess-panel"><div class="guess-top"><div><span class="eyebrow">THE HIDDEN NUMBER</span><p>It’s somewhere in this range.</p></div><div class="range-chip"><span>1</span><b>—</b><span id="range-maximum">25</span></div></div>
+          <div class="guess-visual" aria-hidden="true"><span class="guess-bracket">[</span><div><span class="visual-label">MAKE IT COUNT</span><div id="big-level" class="big-level">01</div></div><span class="visual-multiplier">×25</span><span class="guess-bracket close">]</span></div>
+          <form id="guess-form"><label for="guess-input" class="eyebrow">YOUR GUESS</label><div class="guess-entry"><input id="guess-input" name="guess" type="number" min="1" max="25" inputmode="numeric" placeholder="?" autocomplete="off" required><button class="button button-lime" type="submit">Check <span>↵</span></button></div></form>
+          <div id="feedback" class="feedback" role="status" aria-live="polite">Enter a number to begin.</div>
+          <div class="attempts-row"><div><span class="eyebrow">ATTEMPTS LEFT</span><div id="attempt-dots" class="attempt-dots" aria-label="10 attempts remaining"></div></div><span id="attempt-label" class="attempt-label">1 / 10</span></div>
+        </section>
+        <aside class="play-aside"><section class="panel score-panel"><div class="eyebrow">YOUR RUN</div><div id="live-score" class="live-score">0<span>pts</span></div><div class="score-divider"></div><div class="stat-line"><span>Current level</span><b id="stat-level">1</b></div><div class="stat-line"><span>Personal best</span><b id="stat-best">0 pts</b></div><div class="stat-line"><span>Highest level</span><b id="stat-peak">1</b></div></section><div class="aside-note"><span class="note-symbol">↗</span><p>A correct guess moves you up one level. Your score stays with you.</p></div></aside>
+      </div>
+    </section>
+
+    <section id="over-view" class="over-layout" hidden>
+      <div class="eyebrow"><span class="marker"></span> END OF THIS RUN</div><div class="over-number">!</div><h1>That number kept<br><em>its secret.</em></h1><p id="over-copy"></p><div class="over-stats"><div><span>FINAL SCORE</span><b id="over-score">0</b></div><div><span>LEVEL REACHED</span><b id="over-level">1</b></div><div><span>PERSONAL BEST</span><b id="over-best">0</b></div></div><div class="over-actions"><button id="retry-button" class="button button-lime" type="button">Take another run <span>↗</span></button><button id="over-menu" class="button button-dark" type="button">Back to menu</button></div><p id="save-message" class="field-help"></p>
+    </section>
+  </main>
+
+  <footer class="footer"><span>NUMBER GAME <b>·</b> LOCAL EDITION</span><span>MADE FOR THE MOMENT BEFORE A GUESS</span></footer>
+
+  <dialog id="instructions-dialog"><div class="dialog-top"><span class="eyebrow">HOW TO PLAY</span><button class="icon-button dialog-close" type="button" aria-label="Close">×</button></div><h2>Start small.<br><em>Go as far as you can.</em></h2><ol><li>Each level hides a number from 1 to 25 times the level.</li><li>Enter a valid whole number. The game tells you whether the secret is higher or lower.</li><li>You have ten attempts at each level. Correct answers advance you and earn points.</li><li>Correct within five attempts for 5 points; otherwise earn 2. Your run autosaves after every guess.</li></ol><p class="dialog-foot">Your progress and leaderboards are stored in local JSON files.</p><button class="button button-dark dialog-close" type="button">Got it</button></dialog>
+</body>
+</html>
